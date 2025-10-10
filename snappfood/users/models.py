@@ -7,6 +7,7 @@ from django.utils import timezone
 class UserProfile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     ban_until = models.DateTimeField(null=True, blank=True)
+    location = models.OneToOneField(to='Location', on_delete=models.CASCADE)
 
     @property
     def is_ban(self):
@@ -14,8 +15,15 @@ class UserProfile(models.Model):
             return True
         return False
     
+    def save(self, *args, **kwargs):
+        if self.location is None:
+            raise ValueError("Location cannot be empty for UserProfile")
+        if self.location.lat is None or self.location.long is None:
+            raise ValueError("Latitude and Longitude cannot be null")
+        super().save(*args, **kwargs)
+    
 
 class Location(models.Model):
-    destination_lat = models.FloatField(null=True, blank=True)
-    destination_long = models.FloatField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    long = models.FloatField(null=True, blank=True)
     address = models.TextField(max_length=100)
