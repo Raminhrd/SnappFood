@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from food.models import Product
 
 
 
@@ -27,3 +28,26 @@ class Location(models.Model):
     lat = models.FloatField(null=True, blank=True)
     long = models.FloatField(null=True, blank=True)
     address = models.TextField(max_length=100)
+
+
+class Basket(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    total_price = models.PositiveBigIntegerField()
+    delivery_price = models.PositiveBigIntegerField(default=0)
+    discount = models.PositiveBigIntegerField(default=0)
+    is_paid = models.BooleanField(default=False)
+    destination_lat = models.FloatField(null=True, blank=True)
+    destination_long = models.FloatField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def final_price(self):
+        return self.total_price - self.discount
+
+
+class BasketItem(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

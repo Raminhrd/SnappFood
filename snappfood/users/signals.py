@@ -10,27 +10,13 @@ import requests
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         profile = UserProfile.objects.create(user=instance)
-
-        # چک کن لوکیشن ساخته شده باشه
-        if not profile.location:
-            print("⚠️ No location assigned, skipping API calls.")
-            return
-
-        lat = profile.location.lat
-        long = profile.location.long
-
-        # چک کن که lat و long مقدار داشته باشن
-        if lat is None or long is None:
-            print("⚠️ Location fields are empty, skipping API calls.")
-            return
-
-        # اگه همه‌چیز اوکی بود:
+        
         data = {
             "username": instance.username,
             "first_name": instance.first_name,
             "last_name": instance.last_name,
-            "lat": lat,
-            "long": long,
+            "lat": profile.location.lat,
+            "long": profile.location.long,
         }
   
         urls = [
