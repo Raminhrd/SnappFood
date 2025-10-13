@@ -30,7 +30,7 @@ class AddProductToBasketView(APIView):
         product = get_object_or_404(Product, pk=product_id)
         restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
 
-        if product.restaurant_id != restaurant.id:
+        if product.restaurant.id != restaurant.id:
             return Response({"error": "این محصول متعلق به رستوران انتخاب‌شده نیست."},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -67,7 +67,7 @@ class AddProductToBasketView(APIView):
             product.save()
 
             items = BasketItem.objects.filter(basket=basket).select_related("product")
-            total_price = sum(i.quantity * i.product.price for i in items)
+            total_price = sum(i.quantity * i.product.amount for i in items)
             count = items.count()
             extra_discount = 3000 if count > 9 else 0
 

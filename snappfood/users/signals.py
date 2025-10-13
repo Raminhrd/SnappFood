@@ -15,8 +15,8 @@ def create_user_profile(sender, instance, created, **kwargs):
             "username": instance.username,
             "first_name": instance.first_name,
             "last_name": instance.last_name,
-            "lat": profile.location.lat,
-            "long": profile.location.long,
+           #"lat": profile.location.lat,
+           #"long": profile.location.long,
         }
   
         urls = [

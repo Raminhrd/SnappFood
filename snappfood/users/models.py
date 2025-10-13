@@ -8,7 +8,7 @@ from food.models import Product
 class UserProfile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     ban_until = models.DateTimeField(null=True, blank=True)
-    location = models.OneToOneField(to='Location', on_delete=models.CASCADE)
+    location = models.OneToOneField(to='Location', on_delete=models.CASCADE, null=True, blank=True)
 
     @property
     def is_ban(self):
@@ -16,12 +16,16 @@ class UserProfile(models.Model):
             return True
         return False
     
-    def save(self, *args, **kwargs):
-        if self.location is None:
-            raise ValueError("Location cannot be empty for UserProfile")
-        if self.location.lat is None or self.location.long is None:
-            raise ValueError("Latitude and Longitude cannot be null")
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return self.user.username
+    
+    #def save(self, *args, **kwargs):
+
+       #if self.location_id is None:
+       #    raise ValueError("Location cannot be empty for UserProfile")
+       #if self.location.lat is None or self.location.long is None:
+       #    raise ValueError("Latitude and Longitude cannot be null")
+       #super().save(*args, **kwargs)
     
 
 class Location(models.Model):

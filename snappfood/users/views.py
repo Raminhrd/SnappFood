@@ -15,7 +15,7 @@ def _update_basket_price(basket):
     items = BasketItem.objects.filter(basket=basket)
     count = items.count()
     for item in items:
-        basket.total_price += (item.quantity * item.product.price)
+        basket.total_price += (item.quantity * item.product.amount)
 
     discount = 3000 if count > 9 else 0
     basket.final_price = basket.total_price + basket.delivery_price - (basket.discount + discount)
