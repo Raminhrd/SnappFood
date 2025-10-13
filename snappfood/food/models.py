@@ -1,5 +1,4 @@
 from django.db import models
-from users.models import Location
 
 
 class Category(models.Model):
@@ -10,7 +9,7 @@ class Category(models.Model):
 class Restaurant(models.Model):
     name = models.CharField(max_length=30)
     category = models.ManyToManyField(to=Category)
-    location = models.OneToOneField(to=Location, on_delete=models.CASCADE)
+    location = models.OneToOneField(to='users.Location', on_delete=models.CASCADE)
 
 
 class Product(models.Model):

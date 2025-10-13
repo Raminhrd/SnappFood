@@ -3,7 +3,6 @@ from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
-
 from users.permissions import IsNotBanUser
 from users.models import Basket, BasketItem
 from .models import Product, Restaurant
